@@ -1,7 +1,13 @@
+import base64
+from io import BytesIO
 import random
 import string
 from PIL import Image, ImageFont, ImageDraw
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from flask_cors import CORS
 
+app = Flask(__name__)
+CORS(app)
 
 def createMeme(captions):
     captions = convertCaptionsCamelCase(captions)
@@ -30,15 +36,22 @@ def handleErrorMeme():
 
 
 def convertCaptionsCamelCase(captions):
-    captions = captions.values()
+    print(captions)
+    # captions = captions
+    top = captions[:len(captions)//2]
+    bottom = captions[len(captions)//2:]
+    bottom = bottom.split(" ")
+    top+= bottom[0]
+    bottom = " ".join(bottom[1:])
+    captions = [top, bottom]
     n_words = [len(caption.split()) for caption in captions]
-    text = " ".join(captions).lower()
+    text = " ".join(captions)
     new_text = str()
     flag = False
     for ch in text:
-        if ch in string.ascii_lowercase:
+        if ch in string.ascii_letters:
             if flag:
-                new_text += ch.upper()
+                new_text += ch
                 flag = False
             else:
                 new_text += ch
@@ -58,18 +71,52 @@ def convertCaptionsCamelCase(captions):
     new_captions_dict['bottom'] = new_captions[1]
     return new_captions_dict
 
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    return render_template('index.html')
 
-def generateImage(captions):
-    img = Image.open("app/static/template.jpg")
-    for position, caption in list(captions.items()):
-        addText(img, position, caption)
+@app.route('/gen', methods=['GET', 'POST'])
+def generateImage():
+    print(request.method)
 
-    captions = [c for c in captions.values() if c.strip() != ""]
-    filename = "-".join(captions)+".jpg"
-    filename = filename.replace(' ', '-')
-    img.save("app/static/"+filename)
-    img.close()
-    return filename
+
+    if 1 == 1: 
+        # read body of request
+        content = request.get_json()
+        print(content)
+        # return "jjj"
+        captions = content['caption']
+        captions = convertCaptionsCamelCase(captions)
+        print(captions)
+        # return "kkkk"
+        img_base64 = content['img_base64']
+        img_base64 = img_base64.split(",")[1]
+        # create image from base64
+        img = Image.open(BytesIO(base64.b64decode(img_base64)))
+        # render the image with a popup
+        img.save('img/meme.png')
+        
+        for position, caption in list(captions.items()):
+            addText(img, position, caption)
+
+        # render the image on the browser
+        img.save('img/meme.png')
+        img_base64 = base64.b64encode(open('img/meme.png', 'rb').read())
+        img_base64 = img_base64.decode('utf-8')
+        return jsonify({"img_base64": img_base64})
+
+        # captions = [c for c in captions.values() if c.strip() != ""]
+        # filename = "-".join(captions)+".jpg"
+        # filename = filename.replace(' ', '-')
+        # img.save("img/final.png")
+        # # img.close()
+        # # return filename
+        # # encode image to base64
+        # img_base64 = base64.b64encode(open("img/final.png", "rb").read())
+        # img_base64 = img_base64.decode("utf-8")
+        # print(img_base64)
+        # # return jsonify({"img_base64": img_base64})
+        # return render_template('index.html', img_base64=img)
 
 
 def addText(img, pos, msg):
@@ -78,7 +125,8 @@ def addText(img, pos, msg):
 
     draw = ImageDraw.Draw(img)
 
-    font = ImageFont.truetype("app/impact.ttf", fontSize)
+    font = ImageFont.truetype("impact.ttf", fontSize)
+    # font = ImageFont.load_default()
     w, h = draw.textsize(msg, font)
 
     imgwithpadding = img.width * 0.99
@@ -90,7 +138,7 @@ def addText(img, pos, msg):
     if line_C > 2:
         while True:
             fontSize -= 2
-            fnopen = open("app/impact.ttf", "rb")
+            fnopen = open("impact.ttf", "rb")
             font = ImageFont.truetype(fnopen, fontSize)
             w, h = draw.textsize(msg, font)
             line_C = int(round((w / imgwithpadding) + 1))
@@ -146,3 +194,7 @@ def addText(img, pos, msg):
         draw.text((textX-2, textY+2), lines[i], (0, 0, 0), font=font)
         draw.text((textX, textY), lines[i], (255, 255, 255), font=font)
         lastY = textY
+
+if __name__ == '__main__':
+    app.run(debug=True)
+    # app.run(host='
