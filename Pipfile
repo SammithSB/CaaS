@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+autopep8 = "==1.5.5"
+click = "==7.1.2"
+flask = "==1.1.2"
+flask-cors = "==3.0.10"
+gunicorn = "==20.0.4"
+itsdangerous = "==1.1.0"
+jinja2 = "==2.11.3"
+markupsafe = "==1.1.1"
+pillow = "==8.1.0"
+pycodestyle = "==2.6.0"
+toml = "==0.10.2"
+werkzeug = "==1.0.1"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
