@@ -1,59 +1,20 @@
 # Captioning-as-a-Service
 
-Redefining the internet culture by providing a platform for automating addition of captions to images, improving the quality of life of people called memers.
+Have you ever wanted a personal meme editor to add whatever caption you want? CaaS does exactly that even though there are many options that are way simpler to use, you have to use CaaS, coz it has "as a service" in its name and saying you edit memes on instagram is too middle class.
 
-<p align="center">
-  <img src="/static/meme.png">
-</p>
+![monisha beta](static/monisha.png)
+
+
+The main idea of our project is allowing anyone to give anything as captions to whatever image they want. The project has been deployed on heroku and can be used at anytime.
 
 # How to use CaaS
 
-SaaS is pretty simple to use, and aims to be the simplest (and only) SpongeBob service that exists. The base URL is ```https://spongebob-service.herokuapp.com/```. Captions can be passed in two ways.
+All you need to do to use CaaS is upload the image you want to add caption to and type the caption you want. The base URL is ```https://caasapp.herokuapp.com/```. 
 
-## SaaS using Routes
+One of the results from using the app:
 
-SaaS memes can be generated using the following URL route formats:
+![zubaan kesari](img/meme.png)
 
-* **Bottom caption**: This will insert a caption at the bottom of the image. 
-    * Format: ```https://spongebob-service.herokuapp.com/<bottom caption>```
-
-* **Top and Bottom captions**: This will insert a caption at the top and bottom of the image.
-    * Format: ```https://spongebob-service.herokuapp.com/<top caption>/<bottom caption>```
-
-## SaaS using Parameters
-
-SaaS memes can also be generated using parameters passed in the URL. This method although slower, provides greater flexibility in setting the image positions.
-
-You can choose to have both captions, or either one caption.
-
-* **Both captions**: ```https://spongebob-service.herokuapp.com/q?top=<top caption>&bottom=<bottom caption>```
-
-* **Top or Bottom caption**: 
-  * Top caption: ```https://spongebob-service.herokuapp.com/q?top=<top caption>```
-  * **Bottom caption**: ```https://spongebob-service.herokuapp.com/q?bottom=<bottom caption>```
-
-## SaaS in a Script
-You can even use SaaS in a script. Here is a simple example using Python.
-
-```Python
->>> import requests
->>> from bs4 import BeautifulSoup
->>> 
->>> base_url  = "https://spongebob-service.herokuapp.com/"
->>> meme_url = "https://spongebob-service.herokuapp.com/yOu CaNnOt/CoDe MeMes"
->>> 
->>> response = requests.get(meme_url)
->>> 
->>> soup = BeautifulSoup(response.text, 'html.parser')
->>> img_tags = soup.find_all('img')
->>> 
->>> img_url = img_tags[0]["src"]
->>> img_url = base_url + img_url
->>> 
->>> response = requests.get(img_url)
->>> with open("meme.jpg", 'wb') as outfile:
->>>     outfile.write(response.content)
-```
 
 # Inspiration to make Caption as a Service
 
