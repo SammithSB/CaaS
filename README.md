@@ -55,10 +55,8 @@ You can even use SaaS in a script. Here is a simple example using Python.
 >>>     outfile.write(response.content)
 ```
 
-# Inspiration to convert the SpongeBob Mocking Meme into a Service
+# Inspiration to make Caption as a Service
 
-My dear friend Ryan (name changed) scoffed and said that I cannot make a service out of everything I see. After hearing such a preposterous claim (and the critically acclaimed success of my [AaaS](https://github.com/aditeyabaral/arithmetic-as-a-service)), I just had to prove him wrong. Guess who is laughing now, Ryan.
+PES 2023 biggest inspiration has always been Baral mama and this repo has taken his infamous Spongebob as a Service which was specific to Spongebob meme and converted it into more general any meme you want.
 
-# Contributing to SaaS
-
-Contributions are welcome to include more SpongeBob memes and cleaner code.
+Feel free to contribute with more features or how to improve our code.
