@@ -1,76 +1,69 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>CaaS</title>
     </head>
-    <button>
-    <input id="myinput" type="file" />
-    <input id="caption" type="text" />
-    <button type="button" id = "button">submit</button>
-    <div id="dummy">
-    </div>
-    <script type = "text/javascript">
-        var loadFile = function(event) {
-        
-        
-        // send it as a get request to the server
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-        if (this.readyState === XMLHttpRequest.DONE) {
-            // load the json ino object
-            var obj = JSON.parse(this.responseText);
-            // get the image url
-            final = 'data:image/png;base64,' + obj["img_base64"]
-            // console.log(obj["img_base64"]);
-
-            // document.getElementById("dummy").innerHTML = "<img src='" + final + "' />";
-            // // convert base64 string to image
-            var img = document.createElement('img');
-            img.src = final;
-            document.getElementById('dummy').appendChild(img);
-            document.getElementById('dummy').style.left="200px";
-            document.getElementById('dummy').style.top="100px";
-        }
-    }
-        var selectedfile = document.getElementById("myinput").files;
-        var caption=document.getElementById("caption").value;
-        var result="";
-        var srcData;
-        if (selectedfile.length > 0) {
-          var imageFile = selectedfile[0];
-          var fileReader = new FileReader();
-          fileReader.onload = function(fileLoadedEvent) {
-            srcData = fileLoadedEvent.target.result;
-            requestUrl = "http://localhost:5000/gen"
-        
-            xhr.open("POST", requestUrl, true);
-            // xhr.onreadystatechange = callback;
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.send(JSON.stringify(
-                {
-                    "caption": caption,
-                    "img_base64": srcData
+    <body>
+        <input id = "myinput" type = "file" />
+        <input id = "caption" type = "text" />
+        <button id = "button" type = "button" >submit</button>
+        <div id = "dummy"></div>
+        <script type = "text/javascript">
+            var addCaptions = function(event) {
+                // As soon as the submit button is clicked, the server will send back the image to the server, 
+                // encoded as a base64 string.
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    // If the request is successful, the server will send back the image as a base64 string.
+                    // this is more of a wait for the state of the request to change.
+                    if (this.readyState === XMLHttpRequest.DONE) {
+                        // load the json into object
+                        var obj = JSON.parse(this.responseText);
+                        // get the image url
+                        final = 'data:image/png;base64,' + obj["img_base64"];
+                        // convert base64 string to image, and do some DOM manipulation to display the image.
+                        var img = document.createElement('img');
+                        img.src = final;
+                        document.getElementById('dummy').appendChild(img);
+                        document.getElementById('dummy').style.left="200px";
+                        document.getElementById('dummy').style.top="100px";
+                    }
                 }
-            ));
-          }
-          fileReader.readAsDataURL(imageFile);
-        }
-        
-        
-        // fetch(requestUrl).then(function(response) {
-        //     return response.json();
-        //     }).then(function(data) {
-        //         console.log(data);
-        // });
-        // fetch(requestUrl, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Accept': 'application/json'
-        //     },
-        //     body: JSON.stringify(data)})
-        
-        }
-        document.getElementById('button').addEventListener('click', loadFile);
-    </script>
+                var selectedFile = document.getElementById("myinput").files;
+                var caption=document.getElementById("caption").value;
+                var result="";
+                var srcData;
+                if (selectedFile.length > 0) {
+                    var imageFile = selectedFile[0];
+                    var fileReader = new FileReader();
+                    // read the image as a data URL and send it as a base64 string POST request.
+                    fileReader.onload = function(fileLoadedEvent) {
+                        srcData = fileLoadedEvent.target.result;
+                        requestUrl = "http://localhost:5000/gen"
+                    
+                        xhr.open("POST", requestUrl, true);
+                        // xhr.onreadystatechange = callback;
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.send(JSON.stringify(
+                            {
+                                "caption": caption,
+                                "img_base64": srcData
+                            }
+                        ));
+                    }
+                    fileReader.readAsDataURL(imageFile);
+                }
+                // They say don't delete old code, just comment it out.
+                // fetch(requestUrl, {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //         'Accept': 'application/json'
+                //     },
+                //     body: JSON.stringify(data)})
+            
+            }
+            document.getElementById('button').addEventListener('click', addCaptions);
+        </script>
     </body>
 </html>

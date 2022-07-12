@@ -1,12 +1,12 @@
-# SpongeBob-as-a-Service
+# Captioning-as-a-Service
 
-Converting the SpongeBob Mocking Meme into a Service to redefine the meaning of SaaS.
+Redefining the internet culture by providing a platform for automating addition of captions to images, improving the quality of life of people called memers.
 
 <p align="center">
-  <img src="app/static/readme-meme.jpg">
+  <img src="/static/meme.png">
 </p>
 
-# How to use SaaS
+# How to use CaaS
 
 SaaS is pretty simple to use, and aims to be the simplest (and only) SpongeBob service that exists. The base URL is ```https://spongebob-service.herokuapp.com/```. Captions can be passed in two ways.
 
