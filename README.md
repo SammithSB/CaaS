@@ -5,7 +5,7 @@ Have you ever wanted a personal meme editor to add whatever caption you want? Ca
 ![monisha beta](static/monisha.png)
 
 
-The main idea of our project is allowing anyone to give anything as captions to whatever image they want. The project has been deployed on heroku and can be used at anytime.
+The main idea of our project is allowing anyone to give anything as captions to whatever image they want. The project has been deployed on heroku and can be used anytime.
 
 # How to use CaaS
 
@@ -13,7 +13,7 @@ All you need to do to use CaaS is upload the image you want to add caption to an
 
 One of the results from using the app:
 
-![zubaan kesari](img/meme.png)
+![zubaan kesari](static/kohli.png)
 
 
 # Inspiration to make Caption as a Service
