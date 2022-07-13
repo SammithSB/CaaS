@@ -9,7 +9,7 @@ The main idea of our project is allowing anyone to give anything as captions to 
 
 # How to use CaaS
 
-All you need to do to use CaaS is upload the image you want to add caption to and type the caption you want. The base URL is ```https://caasapp.herokuapp.com/```. 
+All you need to do to use CaaS is upload the image you want to add caption to and type the caption you want. The base URL is [https://caasapp.herokuapp.com/](https://caasapp.herokuapp.com/). 
 
 One of the results from using the app:
 
