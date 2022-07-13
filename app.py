@@ -42,15 +42,15 @@ def index():
 
 @app.route('/gen', methods=['GET', 'POST'])
 def generateImage():
-    if request.method == 'POST': 
+    if request.method == 'POST':
         # ! idk, for some reason even with CORS enabled, GET requests are not allowed
 
         # read body of request
-        content = request.get_json()
+        content = request.json
         captions = content['caption']
         captions = splitCaptionsIntoParts(captions)
 
-        img_base64 = content['img_base64']
+        img_base64 = content['data']
         img_base64 = img_base64.split(",")[1]
         # create image from base64
         

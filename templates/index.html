@@ -4,65 +4,37 @@
     <title>CaaS</title>
   </head>
   <body>
-    <input id="myinput" type="file" />
+    <input id="myinput" type="file" accept="image/*" />
     <input id="caption" type="text" />
     <button id="button" type="button">submit</button>
     <div id="dummy"></div>
-    <script type="text/javascript">
-      var addCaptions = function (event) {
-        // As soon as the submit button is clicked, the server will send back the image to the server,
-        // encoded as a base64 string.
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-          // If the request is successful, the server will send back the image as a base64 string.
-          // this is more of a wait for the state of the request to change.
-          if (this.readyState === XMLHttpRequest.DONE) {
-            // load the json into object
-            var obj = JSON.parse(this.responseText);
-            // get the image url
-            final = "data:image/png;base64," + obj["img_base64"];
-            // convert base64 string to image, and do some DOM manipulation to display the image.
-            var img = document.createElement("img");
-            img.src = final;
-            document.getElementById("dummy").appendChild(img);
-            document.getElementById("dummy").style.left = "200px";
-            document.getElementById("dummy").style.top = "100px";
-          }
-        };
-        var selectedFile = document.getElementById("myinput").files;
-        var caption = document.getElementById("caption").value;
-        var result = "";
-        var srcData;
-        if (selectedFile.length > 0) {
-          var imageFile = selectedFile[0];
-          var fileReader = new FileReader();
-          // read the image as a data URL and send it as a base64 string POST request.
-          fileReader.onload = function (fileLoadedEvent) {
-            srcData = fileLoadedEvent.target.result;
-            requestUrl = "https://caasapp.herokuapp.com/gen";
-
-            xhr.open("POST", requestUrl, true);
-            // xhr.onreadystatechange = callback;
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.send(
-              JSON.stringify({
-                caption: caption,
-                img_base64: srcData,
-              })
-            );
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+      $(document).ready(function(){
+        $("#button").on('click', function(){
+          var file = $("#myinput")[0].files[0];
+          var caption = $("#caption").val();
+          var reader = new FileReader();
+          reader.onload = function(e){
+            var data = e.target.result;
+            $.ajax({
+              url: "/gen",
+              type: "POST",
+              contentType: "application/json; charset=utf-8",
+              data: JSON.stringify({
+                data: data,
+                caption: caption
+              }),
+              success: function({img_base64}){
+                $("#dummy").html("");
+                $("#dummy").append(`<img style="left:200px;top:100px;width:500px;height:600px" src="data:image/png;base64,${img_base64}" />`);
+              }
+            });
           };
-          fileReader.readAsDataURL(imageFile);
-        }
-        // They say don't delete old code, just comment it out.
-        // fetch(requestUrl, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Accept': 'application/json'
-        //     },
-        //     body: JSON.stringify(data)})
-      };
-      document.getElementById("button").addEventListener("click", addCaptions);
+          reader.readAsDataURL(file);
+        });
+
+      });
     </script>
   </body>
 </html>
